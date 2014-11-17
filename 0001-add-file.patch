@@ -1,0 +1,633 @@
+From 926848afd20c2d0a9922c2bc5aabb3f0a261f567 Mon Sep 17 00:00:00 2001
+From: lvhaiyan <lv.haiyan@126.com>
+Date: Mon, 17 Nov 2014 13:32:30 +0800
+Subject: [PATCH] add file
+
+Signed-off-by: lvhaiyan <lv.haiyan@126.com>
+---
+ zh-CN/Controllers_IntegrateApp.md |  56 ++++++++++++++++++++
+ zh-CN/Controllers_SafeMap.md      |  29 +++++++++++
+ zh-CN/Reference_BeeWatch.md       |  96 ++++++++++++++++++++++++++++++++++
+ zh-CN/about.md                    |  29 +++++++++++
+ zh-CN/donate.md                   |  99 +++++++++++++++++++++++++++++++++++
+ zh-CN/quickstart.md               | 107 ++++++++++++++++++++++++++++++++++++++
+ zh-CN/screencasts.md              |  37 +++++++++++++
+ zh-CN/team.md                     |  22 ++++++++
+ zh-CN/usecases.md                 |  69 ++++++++++++++++++++++++
+ 9 files changed, 544 insertions(+)
+ create mode 100644 zh-CN/Controllers_IntegrateApp.md
+ create mode 100644 zh-CN/Controllers_SafeMap.md
+ create mode 100644 zh-CN/Reference_BeeWatch.md
+ create mode 100644 zh-CN/about.md
+ create mode 100644 zh-CN/donate.md
+ create mode 100644 zh-CN/quickstart.md
+ create mode 100644 zh-CN/screencasts.md
+ create mode 100644 zh-CN/team.md
+ create mode 100644 zh-CN/usecases.md
+
+diff --git a/zh-CN/Controllers_IntegrateApp.md b/zh-CN/Controllers_IntegrateApp.md
+new file mode 100644
+index 0000000..08d04e9
+--- /dev/null
++++ b/zh-CN/Controllers_IntegrateApp.md
+@@ -0,0 +1,56 @@
++# 集成第三方应用
++
++beego 支持第三方应用的集成，用户可以自定义 `http.Handler`，用户可以通过如下方式进行注册路由：
++
++	beego.RouterHandler("/chat/:info(.*)", sockjshandler)
++
++sockjshandler 实现了接口 `http.Handler`。
++
++目前在 beego 的 example 中有支持 sockjs 的 chat 例子，示例代码如下：
++
++```go
++package main
++
++import (
++	"fmt"
++	"github.com/astaxie/beego"
++	"github.com/fzzy/sockjs-go/sockjs"
++	"strings"
++)
++
++var users *sockjs.SessionPool = sockjs.NewSessionPool()
++
++func chatHandler(s sockjs.Session) {
++	users.Add(s)
++	defer users.Remove(s)
++	
++	for {
++		m := s.Receive()
++		if m == nil {
++			break
++		}
++		fullAddr := s.Info().RemoteAddr
++		addr := fullAddr[:strings.LastIndex(fullAddr, ":")]
++		m = []byte(fmt.Sprintf("%s: %s", addr, m))
++		users.Broadcast(m)
++	}
++}
++
++type MainController struct {
++	beego.Controller
++}
++
++func (m *MainController) Get() {
++	m.TplNames = "index.html"
++}
++
++func main() {
++	conf := sockjs.NewConfig()
++	sockjshandler := sockjs.NewHandler("/chat", chatHandler, conf)
++	beego.Router("/", &MainController{})
++	beego.RouterHandler("/chat/:info(.*)", sockjshandler)
++	beego.Run()
++}
++```
++
++通过上面的代码很简单的实现了一个多人的聊天室。上面这个只是一个 sockjs 的例子，我想通过大家自定义 `http.Handler`，可以有很多种方式来进行扩展 beego 应用。
+\ No newline at end of file
+diff --git a/zh-CN/Controllers_SafeMap.md b/zh-CN/Controllers_SafeMap.md
+new file mode 100644
+index 0000000..7bde9cb
+--- /dev/null
++++ b/zh-CN/Controllers_SafeMap.md
+@@ -0,0 +1,29 @@
++# 线程安全的 Map
++
++我们知道在 Go 语言里面 map 是非线程安全的，详细的 [atomic_maps](http://golang.org/doc/faq#atomic_maps)。但是我们在平常的业务中经常需要用到线程安全的 map，特别是在 goroutine 的情况下，所以 beego 内置了一个简单的线程安全的 map：
++
++```go
++bm := NewBeeMap()
++if !bm.Set("astaxie", 1) {
++	t.Error("set Error")
++}
++if !bm.Check("astaxie") {
++	t.Error("check err")
++}
++
++if v := bm.Get("astaxie"); v.(int) != 1 {
++	t.Error("get err")
++}
++
++bm.Delete("astaxie")
++if bm.Check("astaxie") {
++	t.Error("delete err")
++}
++```
++
++上面演示了如何使用线程安全的 Map，主要的接口有：
++
++- Get(k interface{}) interface{}
++- Set(k interface{}, v interface{}) bool
++- Check(k interface{}) bool
++- Delete(k interface{})
+diff --git a/zh-CN/Reference_BeeWatch.md b/zh-CN/Reference_BeeWatch.md
+new file mode 100644
+index 0000000..128d085
+--- /dev/null
++++ b/zh-CN/Reference_BeeWatch.md
+@@ -0,0 +1,96 @@
++# Bee Watch
++
++[![Build Status](https://drone.io/github.com/beego/beewatch/status.png)](https://drone.io/github.com/beego/beewatch/latest)
++
++Bee Watch 是一款 Go 语言的交互式调试工具。
++
++### 特性
++
++- 使用 `Critical`、`Info` 和 `Trace` 三个级别来改变调试器的行为。
++- `Display()` 打印变量值或者使用 `Printf()` 自定义输出格式。
++- 使用用户友好界面的 **WebSocket** 模式或能够轻松控制的 **命令行** 模式。
++- 调用 `AddWatchVars()` 来监视变量并在程序调用 `Break()` 时显示它们的信息。
++- 通过 `beewatch.json` 配置文件来实现自定义配置。
++
++### 安装
++
++Bee Watch 是一个可以使用 “go get” 安装的 Go 项目，您可以执行以下命令完成自动安装：
++
++	go get github.com/beego/beewatch
++
++**注意** 该项目目前只能通过源码安装。
++
++### 快速入门
++
++#### 用法
++
++	package main
++
++	import (
++		"time"
++
++		"github.com/beego/beewatch"
++	)
++
++	func main() {
++		// 默认级别为：Trace，
++		// 或使用 `beewatch.Start(beewatch.Info())` 设置级别。
++		beewatch.Start()
++
++		// 声明一些变量。
++		appName := "Bee Watch"
++		boolean := true
++		number := 3862
++		floatNum := 3.1415926
++		test := "fail to watch"
++
++		// 增加监视变量，参数必须为偶数。
++		// 需要注意的是您必须传递被监视变量的地址。	
++		// 该功能当前只支持基本类型。
++		// 在下面的例子中，'test' 不会被监视。
++		beewatch.AddWatchVars("test", test, "App Name", &appName,
++			"bool", &boolean, "number", &number, "float", &floatNum)
++
++		// 打印信息。
++		beewatch.Info().Display("App Name", appName).Break().
++			Printf("boolean value is %v; number is %d", boolean, number)
++
++		beewatch.Critical().Break().Display("float", floatNum)
++
++		// 修改一些值。
++		appName = "Bee Watch2"
++		number = 250
++		// 您将在这里看到一些有趣的东西。
++		beewatch.Trace().Break()
++
++		// 多线程测试。
++		for i := 0; i < 3; i++ {
++			go multipletest(i)
++		}
++
++		beewatch.Trace().Printf("Wait 3 seconds...")
++		select {
++		case <-time.After(3 * time.Second):
++			beewatch.Trace().Printf("Done debug")
++		}
++	
++		// 关闭调试器，当您调试 Web 服务器时，可忽略该操作。
++		beewatch.Close()
++	}
++
++	func multipletest(num int) {
++		beewatch.Critical().Break().Display("num", num)
++	}
++
++#### 连接
++
++当您使用 **WebSocket** 模式时，Bee Watch 会自动监听 [http://localhost:23456](http://localhost:23456)，您可以用过配置 `beewatch.json` 来修改调试器行为（请从 Bee Watch 的源码目录拷贝默认配置）。
++
++您的浏览器必须支持 WebSocket，在 Mac 和 Windows 上的 Chrome、Safari 和 Firefox 均以通过测试。
++
++![Bee Watch demo](https://github.com/beego/beewatch/blob/master/tests/images/demo_beewatch.png?raw=true)
++
++### 示例和 API 文档
++
++[Go Walker](http://gowalker.org/github.com/beego/beewatch)
++
+diff --git a/zh-CN/about.md b/zh-CN/about.md
+new file mode 100644
+index 0000000..3f0a735
+--- /dev/null
++++ b/zh-CN/about.md
+@@ -0,0 +1,29 @@
++# 关于
++
++[![Build Status](https://drone.io/github.com/astaxie/beego/status.png)](https://drone.io/github.com/astaxie/beego/latest) [![Go Walker](http://gowalker.org/api/v1/badge)](http://gowalker.org/github.com/astaxie/beego)
++
++本网站文档页面详细描述了 beego 应用框架的各个方面。
++
++### 新手指导
++
++如果您是首次了解 beego，我们建议您先阅读 [快速入门](quickstart)。
++
++### 其它资源
++
++如果您无法找到相关问题的满意答案，可以在 [邮件列表 (beego-framework@googlegroups.com)](https://groups.google.com/forum/#!forum/beego-framework) 中搜索。
++
++### 寻求帮助
++
++如果您遇到无法解决的问题，可以发送邮件到 [beego-framework@googlegroups.com](mailto:beego-framework@googlegroups.com) 提问。
++
++### 问题提交
++
++如果您在使用过程中发现 beego 有潜在的问题，请通过 [Github](https://github.com/astaxie/beego/issues) 上的问题列表提交。
++
++### 完善文档
++
++您可以通过派生 [文档项目](https://github.com/beego/beedoc)、编辑，然后提交合并请求。
++
++### 网站源码
++
++请移步 [Beego Web](https://github.com/beego/beeweb)。
+\ No newline at end of file
+diff --git a/zh-CN/donate.md b/zh-CN/donate.md
+new file mode 100644
+index 0000000..317102b
+--- /dev/null
++++ b/zh-CN/donate.md
+@@ -0,0 +1,99 @@
++# 捐赠我们
++
++<h4>
++	<b><font color="red">
++		beego 应用框架一直致力于为大家提供一个快速开发应用的途径，同时推广发展国内的 Go 发展，您的帮助是对我们最大的鼓励和支持！<br>
++		我们团队这一年多来一直在坚持不懈的努力改进，并会一直坚持开源免费为大家提供最好的 Go 框架而努力，会持续不断的增加新功能，提供用户在开发中遇到的各类解决方案，如果您觉得我们的成果对你有帮助，那么我们乐意接收来自各路豪杰的捐助^_^。
++	</font></b>
++</h4>
++
++<h4>	
++	<b>支付宝扫描捐赠</b>：<img src="/static/img/alipay.png">
++</h4>
++
++<h4>	
++	<b>Paypal捐赠</b>
++	<p>
++		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
++			<input type="hidden" name="cmd" value="_s-xclick">
++			<input type="hidden" name="hosted_button_id" value="SRG4CAN6L6HYU">
++			<table>
++			<tr><td><input type="hidden" name="on0" value="support beego">support beego</td></tr><tr><td><select name="os0">
++				<option value="Option 1">Option 1 $30.00 USD</option>
++				<option value="Option 2">Option 2 $50.00 USD</option>
++				<option value="Option 3">Option 3 $100.00 USD</option>
++				<option value="Option 4">Option 4 $500.00 USD</option>
++			</select> </td></tr>
++			</table>
++			<input type="hidden" name="currency_code" value="USD">
++			<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
++			<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
++		</form>
++	</p>
++</h4>
++
++### 您的捐赠将被用于：
++
++- 持续和深入的开发
++- 维护社区的运行稳定
++- 租用更好的带宽
++- 奖励团队的杰出贡献者
++- 社区活动或讲座
++
++### 捐赠列表（按照捐赠时间倒序）
++
++| 捐赠时间          | 捐赠人     | 金额      | 附言                     |
++| ---------------- |:---------:| --------:| ----------------------- |
++| 2014.01.16 13:49 | 韩永柏     | ¥10.24  |   开始golang，非常感谢(@hyongbai)|
++| 2014.01.15 23:17 | 郭帅      | ¥100.00   |   beego很强大，希望能越做越好！|
++| 2014.01.11 13:28 | 李文施     | ¥888.88  |   砖头, 矿渣。|
++| 2014.01.11 13:23 | 李文施     | ¥888.88  |   砖头, 矿渣。|
++| 2014.01.09 20:50 | 徐缓       | ¥30.00  |   从你们的书和项目中受益匪浅，穷学生一个，微薄之力仅仅表感谢|
++| 2014.01.02 10:50 | 覃礼钧     | ¥50.00  |   我正在用Beego开发个人自媒体网站。|
++| 2013.12.28 01:15 | 孙宏建     | ¥30.00  |   支持国人对开源的贡献          |
++| 2013.12.23 17:14 | 李喜       | ¥38.00  |   支持开源          |
++| 2013.12.23 17:12 | 蒋惟堃     | ¥30.00  |   支持beego              |
++| 2013.12.23 17:10 | 陈明达     | ¥88.88  |   希望beego越来越棒          |
++| 2013.12.21 11:30 | 黄诤       | ¥88.88  |   BEEGO宏图大业          |
++| 2013.12.20 12:01 | 杨恒飞     | ¥99.99   |   开源受益者，贡献一份力量  |
++| 2013.12.18 21:55 | 宋光义     | ¥100.00  |   beego很好，向你学习     |
++| 2013.12.18 21:12 | 黄甜      | ¥20.00  |   感谢你的框架             |
++| 2013.12.12 19:47 | 周思达     | ¥19.80  |   [你懂的]                |
++| 2013.12.12 18:04 | 董建农     | ¥10.00  |   必须支持                |
++| 2013.12.12 16:20 | 俞翔       | ¥18.88  |   beeeeeegoooooo         |
++| 2013.12.12 16:14 | 孙彦欣       | ¥50.00  |   雪虎                  |
++| 2013.12.12 16:10 | 邵天宇       | ¥88.88  |   好吧，再来一个！！我要比方总多！|
++| 2013.12.12 16:05 | 邵天宇       | ¥18.81  |   买杯咖啡犒劳下吧！      |
++| 2013.12.12 16:04 | 付光荣       | ¥10.00  |   支持beego             |	
++| 2013.12.12 15:54 | 常焱       | ¥58.58  |   to beego               |
++| 2013.12.12 15:44 | 谢敬民     | ¥28.00  |                          |
++| 2013.12.12 15:42 | 钱文君     | ¥10.00  | 屌丝一枚，暂时捐的寒碜      |
++| 2013.12.12 15:37 | 李文涛     | ¥100.00  | 加油！Beego！            |
++| 2013.12.12 15:34 | 周明岐     | ¥10.00   | 为了加vip群              |
++| 2013.12.09 00:28 | 董泽润     | ¥200.00  | 谢大加油go-in-action     |
++| 2013.12.06 16:43 | 廖君       | ¥3.00    | 谢谢您的go web编程       |
++| 2013.12.01 21:14 | 李保银     | ¥20.00    | 支持Go实战开发，不成敬意  |
++| 2013.11.21 11:16 | 周维       | ¥20.00    | 支持谢大                |
++| 2013.11.12 17:56 | 熊书宜     | ¥9.99    | hello,beego!           |
++| 2013.11.10 20:21 | 曾锦和     | ¥10.00    | 还没赚到钱，聊表心意      |
++| 2013.11.08 21:10 | 余征       | ¥10.00    | 准备使用beego了，希望它能如愿，支持谢大|
++| 2013.11.06 13:42 | 童中波     | ¥5.00    | come baby               |
++| 2013.11.03 11:38 | 方云麟     | ¥10.00   | 虽然最近很穷，但是还是捐一捐，图个吉利。     |
++| 2013.10.31 09:49 | 汪大平     | ¥10.00   | 能不能加入你们开发组啊     |
++| 2013.10.27 21:30 | 李代红     | ¥9.90    | 支持beego               |
++| 2013.10.18 09:55 | 蔺保忠     | ¥118.00  | 严重支持谢老大            |
++| 2013.10.03 21:20 | 李文施     | ¥88.88   | 砖工：学生狗，钱不多，支持下beego，支持下谢大。|
++| 2013.09.30 14:59 | 高步双     | ¥11.00   | 必须支持谢大！！！         |
++| 2013.09.30 12:07 | 刘冬瑞     | ¥10.00   | 加油                     |
++| 2013.09.30 11:54 | 方圆       | ¥100.00  | 谢总管好                 |
++| 2013.09.30 11:38 | 张首华     | ¥10.00   | 支持                     |
++| 2013.09.30 10:22 | 张德福     | ¥20.00   | 郑州--救赎-迟镇凯          |
++| 2013.09.24 17:52 | 赵海斌     | ¥10.00   | 支持谢大!                 |
++| 2013.09.24 15:30 | 刘孝园     | ¥10.00   | 谢谢谢大大的努力           |
++| 2013.09.24 15:29 | 薛以祥     | ¥8.88    | 支持谢大。                |
++| 2013.09.24 15:25 | 张晔       | ¥8.88    | hello world             |
++| 2013.09.24 15:15 | 傅冬       | ¥20.33   | 傅小黑，捐赠              |
++| 2013.09.24 15:10 | 林建造     | ¥10.50   | golang导师               |
++| 2013.09.24 15:06 | 肖建亮     | ¥6.66    | 六六大顺吧                |
++| 2013.09.24 15:02 | 高栋       | ¥8.88    | hello world & beego     |
++| 2013.09.24 15:01 | 方云麟     | ¥10.00   | 不许踢我                  |
+\ No newline at end of file
+diff --git a/zh-CN/quickstart.md b/zh-CN/quickstart.md
+new file mode 100644
+index 0000000..8886027
+--- /dev/null
++++ b/zh-CN/quickstart.md
+@@ -0,0 +1,107 @@
++# 快速入门
++
++## 安装
++
++beego 包含一些示例应用程序以帮您学习并使用 beego 应用框架。
++
++您需要安装 Go 1.1+ 以确保所有功能的正常使用。
++
++你需要安装 Beego 和 [Bee](http://beego.me/docs/install/bee.md) 的开发工具:
++	
++	$ go get github.com/astaxie/beego
++	$ go get github.com/beego/bee
++
++为了更加方便的操作，请将 `$GOPATH/bin` 加入到你的 $PATH 变量中。
++
++想要快速建立一个应用来检测安装？
++
++	$ cd $GOPATH/src
++	$ bee new hello
++	$ cd hello
++	$ bee run hello
++
++Windows 平台下输入：
++
++    >cd %GOPATH%/src
++    >bee new hello
++    >cd hello
++    >bee run hello
++
++这些指令帮助您：
++
++1. 安装 beego 到您的 $GOPATH 中。
++2. 在您的计算机上安装 Bee 工具。
++3. 创建一个名为 “hello” 的应用程序。
++4. 启动热编译。
++
++一旦程序开始运行，您就可以在浏览器中打开 [http://localhost:8080/](http://localhost:8080/) 进行访问。
++
++## 简单示例
++
++下面这个示例程序将会在浏览器中打印 “Hello world”，以此说明使用 beego 构建 Web 应用程序是多么的简单！
++
++	package main
++	
++	import (
++		"github.com/astaxie/beego"
++	)
++	
++	type MainController struct {
++		beego.Controller
++	}
++	
++	func (this *MainController) Get() {
++		this.Ctx.WriteString("hello world")
++	}
++	
++	func main() {
++		beego.Router("/", &MainController{})
++		beego.Run()
++	}
++
++把上面的代码保存为 hello.go，然后通过命令行进行编译并执行：
++
++	$ go build -o hello hello.go
++	$ ./hello
++
++这个时候你可以打开你的浏览器，通过这个地址浏览 [http://127.0.0.1:8080](http://127.0.0.1:8080) 返回 “hello world”。
++
++那么上面的代码到底做了些什么呢？
++
++1. 首先我们导入了包 `github.com/astaxie/beego`。我们知道 Go 语言里面被导入的包会按照深度优先的顺序去执行导入包的初始化（变量和 init 函数，[更多详情](https://github.com/astaxie/build-web-application-with-golang/blob/master/ebook/02.3.md#maininit)），beego 包中会初始化一个 BeeAPP 的应用和一些参数。
++2. 定义 Controller，这里我们定义了一个 struct 为 `MainController`，充分利用了 Go 语言的组合的概念，匿名包含了 `beego.Controller`，这样我们的 `MainController` 就拥有了 `beego.Controller` 的所有方法。
++3. 定义 RESTful 方法，通过匿名组合之后，其实目前的 `MainController` 已经拥有了 `Get`、`Post`、`Delete`、`Put` 等方法，这些方法是分别用来对应用户请求的 Method 函数，如果用户发起的是 POST 请求，那么就执行 `Post` 函数。所以这里我们定义了 `MainController` 的 `Get` 方法用来重写继承的 `Get` 函数，这样当用户发起 GET 请求的时候就会执行该函数。
++4. 定义 main 函数，所有的 Go 应用程序和 C 语言一样都是 main 函数作为入口，所以我们这里定义了我们应用的入口。
++5. Router 注册路由，路由就是告诉 beego，当用户来请求的时候，该如何去调用相应的 Controller，这里我们注册了请求 `/` 的时候，请求到 `MainController`。这里我们需要知道，Router 函数的两个参数函数，第一个是路径，第二个是 Controller 的指针。
++6. Run 应用，最后一步就是把在步骤 1 中初始化的 BeeApp 开启起来，其实就是内部监听了 8080 端口：Go 默认情况会监听你本机所有的 IP 上面的 8080 端口。
++
++停止服务的话，请按 `Ctrl+c`。
++
++
++下面为 windows 下的快捷操作批处理文件：
++在 `%GOPATH%/src` 目录下分别创建文件 `step1.install-bee.bat` 和 `step2.new-beego-app.bat`。
++
++`step1.install-bee.bat` 文件内容：
++
++	set GOPATH=%~dp0..
++	go build github.com\beego\bee
++	copy bee.exe %GOPATH%\bin\bee.exe
++	del bee.exe
++	pause
++
++`step2.new-beego-app.bat` 文件内容：
++
++	@echo 设置 App 的值为您的应用文件夹名称
++	set APP=coscms.com
++	set GOPATH=%~dp0..
++	set BEE=%GOPATH%\bin\bee
++	%BEE% new %APP%
++	cd %APP%
++	echo %BEE% run %APP%.exe > run.bat
++	echo pause >> run.bat
++	start run.bat
++	pause
++	start http://127.0.0.1:8080
++
++依次点击上面创建的两个文件即可快速开启 beego 之旅。
++以后只需要到您的应用目录下点击 `run.bat` 即可。
+diff --git a/zh-CN/screencasts.md b/zh-CN/screencasts.md
+new file mode 100644
+index 0000000..bb84971
+--- /dev/null
++++ b/zh-CN/screencasts.md
+@@ -0,0 +1,37 @@
++# 视频教程
++
++这是课程的详细规划:
++https://github.com/beego/tutorial/blob/master/README_zh.md
++
++1. beego入门教程第一课之设计思路
++
++	<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=EliSnrCpCi4&lcode=&resourceId=375194595_06_05_99" allowtransparency="true" scrolling="no" border="0" frameborder="0" style="width:480px;height:400px;"></iframe>
++	
++	slide地址: [设计思路](http://go-talks.appspot.com/github.com/beego/tutorial/zh/1/why_beego.slide#1)
++	* 土豆: http://www.tudou.com/programs/view/EliSnrCpCi4/
++	* 优酷: http://v.youku.com/v_show/id_XNzEwMTczNzY4.html
++	* 网盘下载地址: http://pan.baidu.com/s/1pJO7btD
++
++2. beego入门教程第二课之路由设置
++
++	<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=mid55HCg1EY&lcode=&resourceId=375194595_06_05_99" allowtransparency="true" scrolling="no" border="0" frameborder="0" style="width:480px;height:400px;"></iframe>
++	
++	slide地址: [路由设置](http://go-talks.appspot.com/github.com/beego/tutorial/zh/2/router.slide#1)
++	* 土豆：http://www.tudou.com/programs/view/mid55HCg1EY/
++	* 51CTO: http://edu.51cto.com/lesson/id-24586.html
++	* 网盘：http://pan.baidu.com/s/1o6jXSc6
++	
++3. beego入门教程第三课之参数设置
++
++	<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=U1MiDKq4JdQ&lcode=&resourceId=375194595_06_05_99" allowtransparency="true" scrolling="no" border="0" frameborder="0" style="width:480px;height:400px;"></iframe>
++	
++	slide地址: [参数设置](http://go-talks.appspot.com/github.com/beego/tutorial/zh/3/params.slide#1)
++	* 土豆：http://www.tudou.com/programs/view/U1MiDKq4JdQ/
++	* 51CTO: http://edu.51cto.com/lesson/id-24586.html
++	* 网盘：http://pan.baidu.com/s/1i32zA41
++	
++4. beego 一分钟创建API
++
++	<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=aM7iKLlBlrU&lcode=&resourceId=375194595_06_05_99" allowtransparency="true" scrolling="no" border="0" frameborder="0" style="width:480px;height:400px;"></iframe>	
++	
++	* 网盘下载链接: http://pan.baidu.com/s/1sj0jI6T 密码: x46e		
+\ No newline at end of file
+diff --git a/zh-CN/team.md b/zh-CN/team.md
+new file mode 100644
+index 0000000..4121dbd
+--- /dev/null
++++ b/zh-CN/team.md
+@@ -0,0 +1,22 @@
++# 开发团队
++
++### Asta谢
++
++- 团队角色：beego 创始人，框架主要开发者。
++- 社交网络：[新浪微博](http://weibo.com/533452688) [GitHub](https://github.com/astaxie) [Twitter](https://twitter.com/astaxie) [Google+](https://plus.google.com/u/0/111292884696033638814)
++
++### Slene
++
++- 团队角色：ORM 开发者，兼职 beego 示例及官网开发
++- 社交网络：[新浪微博](http://weibo.com/slene) [GitHub](https://github.com/slene) [Twitter](https://twitter.com/slene)
++
++
++### ClownFish
++
++- 团队角色：beego 后台管理系统开发者
++- 社交网络：[GitHub](https://github.com/osgochina)
++
++### Lei Cao
++
++- 团队角色：维护英文文档和资源
++- 社交网络：[GitHub](https://github.com/lei-cao)
+\ No newline at end of file
+diff --git a/zh-CN/usecases.md b/zh-CN/usecases.md
+new file mode 100644
+index 0000000..82e7aa9
+--- /dev/null
++++ b/zh-CN/usecases.md
+@@ -0,0 +1,69 @@
++# 开发案例
++
++<table class="docker_use_cases_table table">
++    <thead>
++        <tr>
++            <td>开发目标</td>
++            <td>项目实例</td>
++            <td>链接</td>
++        </tr>
++    </thead>
++
++    <tbody>
++        <tr>
++            <td>Go API 文档服务器</td>
++            <td>Go 步行者 - 一个用于在线生成并浏览 Go 项目 API 文档及源码 的 Web 服务器。</td>
++            <td><a target="_blank" href="http://gowalker.org">http://gowalker.org</a></td>
++        </tr>
++
++        <tr>
++        	<td>API 服务</td>
++        	<td>360 向有道提供的搜索 API 服务，千万级请求流量。</td>
++        </tr>
++
++        <tr>
++        	<td></td>
++        	<td>Bmob 移动云的 API 服务，每天的请求量超过 5000 万。</td>
++        </tr>
++
++        <tr>
++        	<td></td>
++        	<td>Weibo 3 后端 API 服务。</td>
++        </tr>
++
++        <tr>
++        	<td>博客网站</td>
++        	<td>速动中国 - 多用户博客分享网站</td>
++        	<td><a target="_blank" href="http://www.sudochina.com">http://sudochina.com</a></td>
++        </tr>
++
++        <tr>
++        	<td>社区论坛</td>
++        	<td>非常时刻 - 社交分享社区</td>
++        	<td><a target="_blank" href="http://www.veryhour.com">http://veryhour.com</a></td>
++        </tr>
++        
++           <tr>
++        	<td>股票应用</td>
++        	<td>数据查询</td>
++        	<td><a target="_blank" href="http://sj.n8n8.cn/">http://sj.n8n8.cn/</a></td>
++        </tr>
++
++        <tr>
++        	<td>企业网站</td>
++        	<td>艾美</td>
++        	<td><a target="_blank" href="http://www.ibeautys.com/">http://ibeautys.com/</a></td>
++        </tr>
++
++        <tr>
++        	<td></td>
++        	<td>茵特拉</td>
++        	<td><a target="_blank" href="http://interla.net">http://interla.net</a></td>
++        </tr>
++                <tr>
++        	<td></td>
++        	<td>欧润吉广告</td>
++        	<td><a target="_blank" href="http://www.orangesh.com">http://www.orangesh.com</a></td>
++        </tr>
++    </tbody>
++</table>
+-- 
+1.8.3.msysgit.0
+
