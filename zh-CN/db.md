@@ -148,6 +148,19 @@
            <td></td>
            <td>创建时间</td>
         </tr>
+        <tr>
+           <td>10</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
      </body>
   </table>
 </div>
@@ -182,6 +195,7 @@
            <td></td>
            <td>用户ID</td>
         </tr>
+       
 		<tr>
            <td>2</td>
  		   <td>UserName</td>
@@ -197,6 +211,19 @@
         </tr>
         <tr>
            <td>3</td>
+ 		   <td>secret</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>密钥，作为使用到页面的参数，自动生成</td>
+        </tr>
+        <tr>
+           <td>4</td>
  		   <td>Password</td>
  		   <td>varchar</td>
  		   <td>50</td>
@@ -209,7 +236,7 @@
            <td>密码</td>
         </tr>
         <tr>
-           <td>4</td>
+           <td>5</td>
  		   <td>DisplayName</td>
  		   <td>varchar</td>
  		   <td>50</td>
@@ -222,7 +249,7 @@
            <td>姓名</td>
         </tr>
 		<tr>
-           <td>5</td>
+           <td>6</td>
  		   <td>EMail</td>
  		   <td>varchar</td>
  		   <td>255</td>
@@ -235,7 +262,7 @@
            <td>邮箱地址</td>
         </tr>
         <tr>
-           <td>6</td>
+           <td>7</td>
  		   <td>Mobile</td>
  		   <td>varchar</td>
  		   <td>50</td>
@@ -248,7 +275,7 @@
            <td>手机号码</td>
         </tr>
 		<tr>
-           <td>7</td>
+           <td>8</td>
  		   <td>CountOfLogin</td>
  		   <td>int</td>
  		   <td>50</td>
@@ -261,7 +288,7 @@
            <td>登录次数</td>
         </tr>
 		<tr>
-           <td>5</td>
+           <td>9</td>
  		   <td>IsLock</td>
  		   <td>int</td>
  		   <td>4</td>
@@ -274,7 +301,7 @@
            <td>是否锁定</td>
         </tr>
 		<tr>
-           <td>6</td>
+           <td>10</td>
  		   <td>CreateDate</td>
  		   <td>datetime</td>
  		   <td>8</td>
@@ -287,7 +314,7 @@
            <td>创建时间</td>
         </tr>
         <tr>
-           <td>7</td>
+           <td>11</td>
  		   <td>Level</td>
  		   <td>int</td>
  		   <td>4</td>
@@ -299,10 +326,23 @@
            <td></td>
            <td>用户级别 1-50</td>
         </tr>
+        <tr>
+           <td>12</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
      </body>
   </table>
 </div>
-### 用户组【UserGroup】
+### 用户组【SystemGroup】
 <div class="row" style="">
    <table>
       <body> 
@@ -401,7 +441,7 @@
      </body>
   </table>
 </div>
-### 系统配置表
+### 系统配置表【SystemConfig】
 <div class="row" style="">
    <table>
       <body> 
@@ -542,7 +582,7 @@
   </table>
 </div>
 
-### 菜单表
+### 菜单表【SystemMenu】
 <div class="row" style="">
    <table>
       <body> 
@@ -596,11 +636,11 @@
            <td></td>
            <td>否</td>
            <td></td>
-           <td>显示名</td>
+           <td>菜单显示名</td>
         </tr>
         <tr>
            <td>4</td>
- 		   <td>STMPServer</td>
+ 		   <td>Url</td>
  		   <td>varchar</td>
  		   <td>255</td>
  		   <td>0</td>
@@ -609,48 +649,73 @@
            <td></td>
            <td>是</td>
            <td></td>
-           <td>发送邮箱服务器</td>
+           <td>链接地址</td>
         </tr>
 		<tr>
            <td>5</td>
- 		   <td>STMPPort</td>
- 		   <td>int</td>
- 		   <td>4</td>
+ 		   <td>ParentID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
  		   <td>0</td>
  	       <td>否</td>
            <td>否</td>
            <td></td>
            <td>是</td>
            <td></td>
-           <td>发送邮箱服务器端口，默认25</td>
+           <td>父节点</td>
         </tr>
 		<tr>
            <td>6</td>
- 		   <td>STMPUserName</td>
+ 		   <td>ParentsPath</td>
  		   <td>varchar</td>
- 		   <td>50</td>
+ 		   <td>500</td>
  		   <td>0</td>
  	       <td>否</td>
            <td>否 </td>
            <td></td>
            <td>是</td>
            <td></td>
-           <td>发送邮箱服务器用户名</td>
+           <td>path</td>
+        </tr>
+		<tr>
+           <td>7</td>
+ 		   <td>ParentsCount</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>父节点个数</td>
         </tr>
         <tr>
            <td>7</td>
- 		   <td>STMPUserPassword</td>
- 		   <td>varchar</td>
- 		   <td>50</td>
+ 		   <td>ChildrenCount</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
  		   <td>0</td>
  	       <td>否</td>
            <td>否 </td>
            <td></td>
            <td>是</td>
            <td></td>
-           <td>发送邮箱服务器用户密码</td>
+           <td>子节点个数</td>
         </tr>
-    
+        <tr>
+           <td>8</td>
+ 		   <td>Disabled</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>禁用标识 0 不禁用 1 禁用 </td>
+        </tr>
         <tr>
            <td>8</td>
  		   <td>ExtendData</td>
@@ -677,11 +742,36 @@
            <td></td>
            <td>创建时间</td>
         </tr>
+         <tr>
+           <td>10</td>
+ 		   <td>Taxis</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>排序</td>
+        </tr>
+         <tr>
+           <td>8</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
      </body>
   </table>
 </div>
-
-### 评论表
+### 用户权限表【SystemPermissions】
 <div class="row" style="">
    <table>
       <body> 
@@ -698,11 +788,63 @@
            <td>默认值</td>
            <td>说明</td>
         </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>GroupID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户组ID</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>MenuID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>菜单ID</td>
+        </tr>
+       
+		<tr>
+           <td>4</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
      </body>
   </table>
 </div>
-
-### 用户配置表
+### 用户站点配置表【SystemSite】
 <div class="row" style="">
    <table>
       <body> 
@@ -719,6 +861,1454 @@
            <td>默认值</td>
            <td>说明</td>
         </tr>
+		<tr>
+           <td>1</td>
+ 		   <td>SiteID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>SiteName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>站点名称(英文)</td>
+        </tr>
+        <tr>
+           <td>2</td>
+ 		   <td>DisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>站点中文名称</td>
+        </tr>
+       <tr>
+           <td>1</td>
+ 		   <td>UserID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户id</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>DomainName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>站点域名 不包含http:// </td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>secret</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>站点密钥，作为使用到页面的参数，自动生成</td>
+        </tr>
+        <tr>
+           <td>5</td>
+ 		   <td>Displays</td>
+ 		   <td>int</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论显示方式 0 盖楼模式 1 平铺模式 2 嵌套模式</td>
+        </tr>
+ 		<tr>
+           <td>6</td>
+ 		   <td>MaxLayers</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>嵌套最大层数</td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>CountOfPage</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>每页显示评论数 最多100</td>
+        </tr>
+		<tr>
+           <td>8</td>
+ 		   <td>TaxisRule</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>排序规则 0 从旧到新 1 从新到旧</td>
+        </tr>
+		<tr>
+           <td>9</td>
+ 		   <td>Position</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论显示位置 0 顶部 1 底部</td>
+        </tr>
+        <tr>
+           <td>10</td>
+ 		   <td>Copyright</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>版权信息 0 xxx正在使用多评 1 多评 2 Powered by 多评 用户级别大于等于20 不显示版权信息</td>
+        </tr>
+        <tr>
+           <td>11</td>
+ 		   <td>AuditRule</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>审核规则 0 默认提供 1 匿名用户审核 2 人工审核</td>
+        </tr>
+        <tr>
+           <td>12</td>
+ 		   <td>SpamFilter</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>垃圾评论过滤机制 0 不过滤 1 用Akismet智能过滤(Akismet是博客界广泛使用的反垃圾评论服务)</td>
+        </tr>
+        <tr>
+           <td>13</td>
+ 		   <td>KeywordFilter</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>关键词过滤 关键词会被替换成***，词与词之间用空格分割</td>
+        </tr>
+        <tr>
+           <td>14</td>
+ 		   <td>IsInsertFace</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论框选项 允许插入表情</td>
+        </tr>
+        <tr>
+           <td>15</td>
+ 		   <td>IsInsertImage</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论框选项 允许插入图片</td>
+        </tr>
+        <tr>
+           <td>16</td>
+ 		   <td>IsDisableGuest</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论框选项 禁止游客评论</td>
+        </tr>
+
+		<tr>
+           <td>17</td>
+ 		   <td>RequireEMail</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论框选项 要求游客输入邮件地址</td>
+        </tr>
+
+        <tr>
+           <td>18</td>
+ 		   <td>RequireUrl</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论框选项 要求游客输入网址</td>
+        </tr>
+		<tr>
+           <td>19</td>
+ 		   <td>Hots</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>点赞按钮 0 显示 1 不显示</td>
+        </tr>
+		<tr>
+           <td>20</td>
+ 		   <td>Reply</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>回复按钮 0 显示 1 不显示</td>
+        </tr>
+        <tr>
+           <td>21</td>
+ 		   <td>Collect</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>回复按钮 0 显示 1 不显示</td>
+        </tr>
+         <tr>
+           <td>21</td>
+ 		   <td>Report</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>举报按钮 0 显示 1 不显示</td>
+        </tr>
+        <tr>
+           <td>21</td>
+ 		   <td>AvatarUrl</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>默认头像地址</td>
+        </tr>
+        <tr>
+           <td>18</td>
+ 		   <td>Theme</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>样式主题 选择自定义，请填写自定义的样式</td>
+        </tr>
+        <tr>
+           <td>22</td>
+ 		   <td>ThemeTemplate</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>主题模板</td>
+        </tr>
+		<tr>
+           <td>23</td>
+ 		   <td>ThemeCss</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>主题样式</td>
+        </tr>
+        <tr>
+           <td>24</td>
+ 		   <td>ExtendData</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>扩展数据 存储json格式</td>
+        </tr>
+		<tr>
+           <td>25</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+        <tr>
+           <td>26</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
+     </body>
+  </table>
+</div>
+### 样式配置表【SystemThemeConfig】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>ThemeName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>样式名称</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>TemplateName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>模板名称</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>CssName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>样式名称</td>
+        </tr>
+        <tr>
+           <td>5</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+        <tr>
+           <td>6</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
+     </body>
+  </table>
+</div>
+### 自定义文本表【SystemCustomText】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>Code</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>代码</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>Name</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>名称</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>DisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>显示名称</td>
+        </tr>
+        <tr>
+           <td>5</td>
+ 		   <td>Description</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>备注</td>
+        </tr>
+        
+     </body>
+  </table>
+</div>
+### 文章表【Articles】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>Title</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>文章标题</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>Comments</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>评论数</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>Summary</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>简介</td>
+        </tr>
+        <tr>
+           <td>5</td>
+ 		   <td>Author</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>作者</td>
+        </tr>
+        <tr>
+           <td>6</td>
+ 		   <td>PageID</td>
+ 		   <td>varchar</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>页面id </td>
+        </tr>
+         <tr>
+           <td>6</td>
+ 		   <td>UserID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>用户id </td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>SiteID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>站点id </td>
+        </tr>
+        <tr>
+           <td>8</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+     </body>
+  </table>
+</div>
+### 评论表【Comments】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>NikeName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>昵称</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>EMail</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>邮件地址</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>Url</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>个人主页</td>
+        </tr>
+         <tr>
+           <td>5</td>
+ 		   <td>LoginType</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>登录类型 0 匿名 1 QQ 2 sina </td>
+        </tr>
+         <tr>
+           <td>6</td>
+ 		   <td>ParentID</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>父节点默认为空</td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>PageID</td>
+ 		   <td>varchar</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>页面id </td>
+        </tr>
+         <tr>
+           <td>8</td>
+ 		   <td>UserID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的ID </td>
+        </tr>
+         <tr>
+           <td>8</td>
+ 		   <td>UserName</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的登录名 </td>
+        </tr>
+         <tr>
+           <td>10</td>
+ 		   <td>UserDisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的显示名 </td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>SiteID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>站点id </td>
+        </tr>
+        <tr>
+           <td>9</td>
+ 		   <td>Summary</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>评论内容 </td>
+        </tr>
+        <tr>
+           <td>10</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+		<tr>
+           <td>11</td>
+ 		   <td>Hots</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>点赞</td>
+        </tr>
+        <tr>
+           <td>12</td>
+ 		   <td>Reports</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>举报次数</td>
+        </tr>
+        <tr>
+           <td>13</td>
+ 		   <td>IsDeleted</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>删除标识</td>
+        </tr>
+        <tr>
+           <td>14</td>
+ 		   <td>DeleteReason</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>删除原因</td>
+        </tr>
+     </body>
+  </table>
+</div>
+### 作者表，匿名用户不记录【Authors】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		
+        <tr>
+           <td>2</td>
+ 		   <td>EMail</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>邮件地址</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>Url</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>个人主页</td>
+        </tr>
+         <tr>
+           <td>4</td>
+ 		   <td>LoginType</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>登录类型 0 匿名 1 QQ 2 sina </td>
+        </tr>
+        <tr>
+           <td>5</td>
+ 		   <td>UserID</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的ID </td>
+        </tr>
+         <tr>
+           <td>6</td>
+ 		   <td>UserName</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的登录名 </td>
+        </tr>
+         <tr>
+           <td>7</td>
+ 		   <td>UserDisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>作者在原网站的显示名 </td>
+        </tr>
+        <tr>
+           <td>8</td>
+ 		   <td>AvatarUrl</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>头像地址 </td>
+        </tr>
+        <tr>
+           <td>9</td>
+ 		   <td>LastLoginDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>最后评论时间 </td>
+        </tr>
+        <tr>
+           <td>10</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+		<tr>
+           <td>11</td>
+ 		   <td>Hots</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>被点赞次数</td>
+        </tr>
+        <tr>
+           <td>12</td>
+ 		   <td>Reports</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>被举报次数</td>
+        </tr>
+        <tr>
+           <td>13</td>
+ 		   <td>IsLock</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>用户被锁定，不能继续评论</td>
+        </tr>
+        <tr>
+           <td>14</td>
+ 		   <td>access_token</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>sso登录后返回的令牌</td>
+        </tr>
+     </body>
+  </table>
+</div>
+### 登录日志表【SystemLoginLog】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>UserName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户登录名</td>
+        </tr>
+        <tr>
+           <td>3</td>
+ 		   <td>UserDisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户显示名</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>LoginType</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td> 0 管理员 1 用户 2 作者</td>
+        </tr>
+        
+         <tr>
+           <td>5</td>
+ 		   <td>IPAddress</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>IP地址 </td>
+        </tr>
+        <tr>
+           <td>6</td>
+ 		   <td>Action</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>操作 </td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>Summary</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>内容 </td>
+        </tr>
+        <tr>
+           <td>8</td>
+ 		   <td>Status</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>登录标志 0 成功 1 失败 </td>
+        </tr>
+        <tr>
+           <td>9</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+		
+     </body>
+  </table>
+</div>
+###操作日志表【AuditLog】
+<div class="row" style="">
+   <table>
+      <body> 
+         <tr>
+           <td>序号</td>
+ 		   <td>列名</td>
+ 		   <td>数据类型</td>
+ 		   <td>长度</td>
+ 		   <td>小数位</td>
+ 	       <td>标识</td>
+           <td>主键</td>
+           <td>外键</td>
+           <td>允许空</td>
+           <td>默认值</td>
+           <td>说明</td>
+        </tr>
+        <tr>
+           <td>1</td>
+ 		   <td>ID</td>
+ 		   <td>uniqueidentifier</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>是</td>
+           <td>是 </td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>ID</td>
+        </tr>
+		<tr>
+           <td>2</td>
+ 		   <td>UserName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户登录名</td>
+        </tr>
+       <tr>
+           <td>3</td>
+ 		   <td>UserDisplayName</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td>用户显示名</td>
+        </tr>
+        <tr>
+           <td>4</td>
+ 		   <td>LoginType</td>
+ 		   <td>varchar</td>
+ 		   <td>255</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>否</td>
+           <td></td>
+           <td> 0 管理员 1 用户 2 作者</td>
+        </tr>
+        
+         <tr>
+           <td>5</td>
+ 		   <td>IPAddress</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>IP地址 </td>
+        </tr>
+        <tr>
+           <td>6</td>
+ 		   <td>Action</td>
+ 		   <td>varchar</td>
+ 		   <td>50</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>操作 </td>
+        </tr>
+        <tr>
+           <td>7</td>
+ 		   <td>Summary</td>
+ 		   <td>varchar</td>
+ 		   <td>500</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>内容 </td>
+        </tr>
+        <tr>
+           <td>6</td>
+ 		   <td>Status</td>
+ 		   <td>int</td>
+ 		   <td>4</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否</td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>操作标志 0 成功 1 失败 </td>
+        </tr>
+        <tr>
+           <td>9</td>
+ 		   <td>CreateDate</td>
+ 		   <td>datetime</td>
+ 		   <td>8</td>
+ 		   <td>0</td>
+ 	       <td>否</td>
+           <td>否 </td>
+           <td></td>
+           <td>是</td>
+           <td></td>
+           <td>创建时间</td>
+        </tr>
+		
      </body>
   </table>
 </div>
