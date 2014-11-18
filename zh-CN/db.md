@@ -1,18 +1,8 @@
 # 数据库设计
 
 [![Build Status](https://github.com/newlysoft/duoping/status.png)](https://drone.io/github.com/astaxie/beego/latest) [![Go Walker](http://gowalker.org/api/v1/badge)](https://github.com/newlysoft/duoping)
-<style type="text/css">
-        table
-        {
-            border-collapse: collapse;
-            border: none;
-       
-        }
-        td
-        {
-            border: solid #000 1px;
-        }
-</style>
+
+
 本网站文档页面详细描述了 多评 数据库设计。
 ### 管理员表【SystemAdministrators】
 <div class="row" style="">
