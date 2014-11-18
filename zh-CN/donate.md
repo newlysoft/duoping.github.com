@@ -8,7 +8,7 @@
 </h4>
 
 <h4>	
-	<b>支付宝扫描捐赠</b>：<img src="/images/duoping.png">
+	<b>支付宝扫描捐赠</b>：<img src="/images/duoping2.png">
 </h4>
 
 
